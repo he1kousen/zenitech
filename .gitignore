@@ -1,0 +1,47 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies & build output
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Env / secrets — JANGAN commit
+.env
+.env.local
+.env.*.local
+*.pem
+private_key.pem
+public_key.pem
+
+# Supabase local artifacts
+supabase/.branches
+supabase/.temp
+
+# Working notes (markdown internal — bukan dokumentasi publik)
+CLAUDE.md
+PRD.md
+DESIGN.md
+FASE1_CHECKLIST.md
+RLS_FIX_GUIDE.md
+ZENITECH_GUIDE.md
+
+# README.md SENGAJA tidak di-ignore — dokumentasi utama project.

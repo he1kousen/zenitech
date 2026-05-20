@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none">
+  <defs>
+    <linearGradient id="podBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e8e8ec"/>
+    </linearGradient>
+    <linearGradient id="podStem" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f5f5f7"/>
+      <stop offset="1" stop-color="#d2d2d7"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="180" cy="180" rx="78" ry="64" fill="url(#podBody)"/>
+  <ellipse cx="170" cy="172" rx="32" ry="22" fill="#a0a0a4"/>
+  <ellipse cx="170" cy="172" rx="14" ry="10" fill="#3a3a3c"/>
+  <path d="M150 220 Q140 240 142 280 L162 380 Q166 410 184 410 Q204 410 208 380 L218 280 Q220 240 210 220 Z" fill="url(#podStem)"/>
+  <ellipse cx="340" cy="220" rx="78" ry="64" fill="url(#podBody)"/>
+  <ellipse cx="350" cy="212" rx="32" ry="22" fill="#a0a0a4"/>
+  <ellipse cx="350" cy="212" rx="14" ry="10" fill="#3a3a3c"/>
+  <path d="M310 260 Q300 280 302 320 L322 420 Q326 450 344 450 Q364 450 368 420 L378 320 Q380 280 370 260 Z" fill="url(#podStem)"/>
+</svg>

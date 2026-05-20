@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@import "./design-system.css";
+
+@theme {
+  /* Colors */
+  --color-primary: #0066cc;
+  --color-primary-focus: #0071e3;
+  --color-primary-on-dark: #2997ff;
+  --color-ink: #1d1d1f;
+  --color-ink-muted-80: #333333;
+  --color-ink-muted-48: #7a7a7a;
+  --color-body-muted: #cccccc;
+  --color-divider-soft: #f0f0f0;
+  --color-hairline: #e0e0e0;
+  --color-canvas: #ffffff;
+  --color-canvas-parchment: #f5f5f7;
+  --color-surface-pearl: #fafafc;
+  --color-surface-tile-1: #272729;
+  --color-surface-tile-2: #2a2a2c;
+  --color-surface-tile-3: #252527;
+  --color-surface-black: #000000;
+  --color-surface-chip-translucent: #d2d2d7;
+  --color-on-primary: #ffffff;
+  --color-on-dark: #ffffff;
+
+  /* Font Sizes */
+  --font-size-hero-display: 56px;
+  --font-size-display-lg: 40px;
+  --font-size-display-md: 34px;
+  --font-size-lead: 28px;
+  --font-size-lead-airy: 24px;
+  --font-size-tagline: 21px;
+  --font-size-body-strong: 17px;
+  --font-size-body-base: 17px;
+  --font-size-dense-link: 17px;
+  --font-size-caption: 14px;
+  --font-size-caption-strong: 14px;
+  --font-size-button-large: 18px;
+  --font-size-button-utility: 14px;
+  --font-size-fine-print: 12px;
+  --font-size-nav-link: 12px;
+
+  /* Line Heights */
+  --line-height-hero-display: 1.07;
+  --line-height-display-lg: 1.10;
+  --line-height-display-md: 1.47;
+  --line-height-lead: 1.14;
+  --line-height-lead-airy: 1.5;
+  --line-height-tagline: 1.19;
+  --line-height-body-strong: 1.24;
+  --line-height-body-base: 1.47;
+  --line-height-dense-link: 2.41;
+  --line-height-caption: 1.43;
+  --line-height-caption-strong: 1.29;
+  --line-height-button-large: 1.0;
+  --line-height-button-utility: 1.29;
+  --line-height-fine-print: 1.0;
+  --line-height-nav-link: 1.0;
+
+  /* Border Radius */
+  --radius-xs: 5px;
+  --radius-sm: 8px;
+  --radius-md: 11px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+
+  /* Spacing */
+  --spacing-z-xxs: 4px;
+  --spacing-z-xs: 8px;
+  --spacing-z-sm: 12px;
+  --spacing-z-md: 17px;
+  --spacing-z-lg: 24px;
+  --spacing-z-xl: 32px;
+  --spacing-z-xxl: 48px;
+  --spacing-z-section: 80px;
+
+  /* Font Families */
+  --font-family-display: 'SF Pro Display', system-ui, -apple-system, sans-serif;
+  --font-family-text: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+}
+
+/* Autofill Fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #1d1d1f !important;
+}

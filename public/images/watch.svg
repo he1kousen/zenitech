@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" fill="none">
+  <defs>
+    <linearGradient id="watchBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a3a3c"/>
+      <stop offset="1" stop-color="#1d1d1f"/>
+    </linearGradient>
+    <linearGradient id="watchScreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a0a"/>
+      <stop offset="1" stop-color="#1d1d1f"/>
+    </linearGradient>
+    <linearGradient id="watchBand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a5a5c"/>
+      <stop offset="1" stop-color="#3a3a3c"/>
+    </linearGradient>
+  </defs>
+  <path d="M150 40 Q150 20 170 20 L230 20 Q250 20 250 40 L260 180 L140 180 Z" fill="url(#watchBand)"/>
+  <path d="M140 420 L260 420 L250 560 Q250 580 230 580 L170 580 Q150 580 150 560 Z" fill="url(#watchBand)"/>
+  <rect x="120" y="170" width="160" height="260" rx="44" ry="44" fill="url(#watchBody)"/>
+  <rect x="132" y="182" width="136" height="236" rx="34" ry="34" fill="url(#watchScreen)"/>
+  <rect x="280" y="240" width="14" height="40" rx="3" ry="3" fill="#3a3a3c"/>
+  <rect x="280" y="320" width="14" height="22" rx="3" ry="3" fill="#3a3a3c"/>
+</svg>

@@ -1,0 +1,392 @@
+/* Zenitech Design System - Apple-inspired */
+/* Based on DESIGN.md - Photography-first, UI recedes */
+
+/* ============================================
+   COLORS - Single Blue Accent Philosophy
+   ============================================ */
+
+/* Brand & Accent - THE ONLY INTERACTIVE COLOR */
+.bg-primary { background-color: #0066cc; }
+.bg-primary-focus { background-color: #0071e3; }
+.text-primary { color: #0066cc; }
+.text-primary-on-dark { color: #2997ff; }
+.border-primary { border-color: #0066cc; }
+.ring-primary { --tw-ring-color: #0066cc; }
+
+/* Surface - Alternating Tiles */
+.bg-canvas { background-color: #ffffff; }
+.bg-canvas-parchment { background-color: #f5f5f7; }
+.bg-surface-pearl { background-color: #fafafc; }
+.bg-surface-tile-1 { background-color: #272729; }
+.bg-surface-tile-2 { background-color: #2a2a2c; }
+.bg-surface-tile-3 { background-color: #252527; }
+.bg-surface-black { background-color: #000000; }
+.bg-surface-chip-translucent { background-color: rgba(210, 210, 215, 0.64); }
+
+/* Text - Near-Black Ink */
+.text-ink { color: #1d1d1f; }
+.text-body { color: #1d1d1f; }
+.text-body-muted { color: #cccccc; }
+.text-ink-muted-80 { color: #333333; }
+.text-ink-muted-48 { color: #7a7a7a; }
+.text-on-primary { color: #ffffff; }
+.text-on-dark { color: #ffffff; }
+
+/* Hairlines & Borders */
+.border-hairline { border-color: #e0e0e0; }
+.border-divider-soft { border-color: #f0f0f0; }
+
+/* ============================================
+   TYPOGRAPHY - Apple Tight with Negative Tracking
+   ============================================ */
+
+/* Display Sizes - SF Pro Display 600 with negative letter-spacing */
+.text-hero-display {
+  font-family: 'SF Pro Display', system-ui, -apple-system, sans-serif;
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1.07;
+  letter-spacing: -0.28px;
+}
+
+.text-display-lg {
+  font-family: 'SF Pro Display', system-ui, -apple-system, sans-serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.text-display-md {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+}
+
+.text-lead {
+  font-family: 'SF Pro Display', system-ui, -apple-system, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: 0.196px;
+}
+
+.text-lead-airy {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.text-tagline {
+  font-family: 'SF Pro Display', system-ui, -apple-system, sans-serif;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.19;
+  letter-spacing: 0.231px;
+}
+
+/* Body - 17px NOT 16px */
+.text-body-strong {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.24;
+  letter-spacing: -0.374px;
+}
+
+.text-body-base {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+}
+
+.text-dense-link {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 2.41;
+  letter-spacing: 0;
+}
+
+/* Small Sizes */
+.text-caption {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+}
+
+.text-caption-strong {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.29;
+  letter-spacing: -0.224px;
+}
+
+.text-button-large {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: 0;
+}
+
+.text-button-utility {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.29;
+  letter-spacing: -0.224px;
+}
+
+.text-fine-print {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: -0.12px;
+}
+
+.text-nav-link {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: -0.12px;
+}
+
+/* Font Families */
+.font-display {
+  font-family: 'SF Pro Display', system-ui, -apple-system, sans-serif;
+}
+
+.font-text {
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   SHAPES - Pill for Actions, Minimal Rounding
+   ============================================ */
+
+.rounded-none { border-radius: 0; }
+.rounded-xs { border-radius: 5px; }
+.rounded-sm { border-radius: 8px; }
+.rounded-md { border-radius: 11px; }
+.rounded-lg { border-radius: 18px; }
+.rounded-pill { border-radius: 9999px; }
+.rounded-full { border-radius: 9999px; }
+
+/* ============================================
+   SPACING - 8px Base, Section Rhythm
+   ============================================ */
+
+.p-section { padding: 80px; }
+.py-section { padding-top: 80px; padding-bottom: 80px; }
+.px-section { padding-left: 80px; padding-right: 80px; }
+
+.p-xxl { padding: 48px; }
+.py-xxl { padding-top: 48px; padding-bottom: 48px; }
+.px-xxl { padding-left: 48px; padding-right: 48px; }
+
+.p-xl { padding: 32px; }
+.py-xl { padding-top: 32px; padding-bottom: 32px; }
+.px-xl { padding-left: 32px; padding-right: 32px; }
+
+.p-lg { padding: 24px; }
+.py-lg { padding-top: 24px; padding-bottom: 24px; }
+.px-lg { padding-left: 24px; padding-right: 24px; }
+
+.p-md { padding: 17px; }
+.py-md { padding-top: 17px; padding-bottom: 17px; }
+.px-md { padding-left: 17px; padding-right: 17px; }
+
+.p-sm { padding: 12px; }
+.py-sm { padding-top: 12px; padding-bottom: 12px; }
+.px-sm { padding-left: 12px; padding-right: 12px; }
+
+.p-xs { padding: 8px; }
+.py-xs { padding-top: 8px; padding-bottom: 8px; }
+.px-xs { padding-left: 8px; padding-right: 8px; }
+
+.p-xxs { padding: 4px; }
+.py-xxs { padding-top: 4px; padding-bottom: 4px; }
+.px-xxs { padding-left: 4px; padding-right: 4px; }
+
+/* Margin equivalents */
+.m-xl { margin: 32px; }
+.my-xl { margin-top: 32px; margin-bottom: 32px; }
+.mx-xl { margin-left: 32px; margin-right: 32px; }
+.mb-xl { margin-bottom: 32px; }
+.mt-xl { margin-top: 32px; }
+
+.m-lg { margin: 24px; }
+.my-lg { margin-top: 24px; margin-bottom: 24px; }
+.mx-lg { margin-left: 24px; margin-right: 24px; }
+.mb-lg { margin-bottom: 24px; }
+.mt-lg { margin-top: 24px; }
+
+.m-md { margin: 17px; }
+.my-md { margin-top: 17px; margin-bottom: 17px; }
+.mx-md { margin-left: 17px; margin-right: 17px; }
+.mb-md { margin-bottom: 17px; }
+.mt-md { margin-top: 17px; }
+
+.m-sm { margin: 12px; }
+.my-sm { margin-top: 12px; margin-bottom: 12px; }
+.mx-sm { margin-left: 12px; margin-right: 12px; }
+.mb-sm { margin-bottom: 12px; }
+.mt-sm { margin-top: 12px; }
+
+.m-xs { margin: 8px; }
+.my-xs { margin-top: 8px; margin-bottom: 8px; }
+.mx-xs { margin-left: 8px; margin-right: 8px; }
+.mb-xs { margin-bottom: 8px; }
+.mt-xs { margin-top: 8px; }
+
+/* ============================================
+   COMPONENTS - Button Primary (Pill CTA)
+   ============================================ */
+
+.btn-primary {
+  background-color: #0066cc;
+  color: #ffffff;
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  border-radius: 9999px;
+  padding: 11px 22px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0071e3;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-primary:focus {
+  outline: 2px solid #0071e3;
+  outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button Secondary Pill (Ghost) */
+.btn-secondary-pill {
+  background-color: transparent;
+  color: #0066cc;
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  border-radius: 9999px;
+  padding: 11px 22px;
+  border: 1px solid #0066cc;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.btn-secondary-pill:hover {
+  background-color: #fafafc;
+}
+
+.btn-secondary-pill:active {
+  transform: scale(0.95);
+}
+
+/* Button Dark Utility */
+.btn-dark-utility {
+  background-color: #1d1d1f;
+  color: #ffffff;
+  font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.29;
+  letter-spacing: -0.224px;
+  border-radius: 8px;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.btn-dark-utility:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   ELEVATION - Product Shadow ONLY
+   ============================================ */
+
+.product-shadow {
+  box-shadow: rgba(0, 0, 0, 0.22) 3px 5px 30px 0;
+}
+
+/* NO shadows on UI elements - this is the ONLY shadow */
+
+/* ============================================
+   UTILITIES - Apple-specific
+   ============================================ */
+
+/* Active state for all interactive elements */
+.active-scale:active {
+  transform: scale(0.95);
+}
+
+/* Text link */
+.text-link {
+  color: #0066cc;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+.text-link-on-dark {
+  color: #2997ff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.text-link-on-dark:hover {
+  text-decoration: underline;
+}
+
+/* Backdrop blur for sticky bars */
+.backdrop-blur-frosted {
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* Full-bleed tile (no border-radius) */
+.tile-fullbleed {
+  border-radius: 0;
+  width: 100%;
+}
+
+/* Gap utilities */
+.gap-xs { gap: 8px; }
+.gap-sm { gap: 12px; }
+.gap-md { gap: 17px; }
+.gap-lg { gap: 24px; }
+.gap-xl { gap: 32px; }
