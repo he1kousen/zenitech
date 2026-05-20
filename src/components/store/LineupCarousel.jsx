@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useProducts } from '../../hooks/useProducts'
 import { getImageUrl } from '../../lib/supabase'
+import { resolveProductImage, ULTIMATE_FALLBACK } from '../../lib/productImages'
+import SafeImage from './SafeImage'
 
 const formatRupiah = (n) => `Rp${Number(n).toLocaleString('id-ID')}`
 
@@ -33,6 +35,7 @@ function CardSkeleton() {
 
 function LineupCard({ product }) {
   const { name, slug, base_price, image_url, category } = product
+  const imageSrc = resolveProductImage({ slug, image_url, category })
   return (
     <article className="lineup-card">
       <Link
@@ -40,17 +43,12 @@ function LineupCard({ product }) {
         style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
       >
         <div className="lineup-card-image">
-          {image_url ? (
-            <img
-              src={getImageUrl(image_url, 'medium')}
-              alt={name}
-              loading="lazy"
-            />
-          ) : (
-            <div className="lineup-card-placeholder">
-              <span>{name}</span>
-            </div>
-          )}
+          <SafeImage
+            src={getImageUrl(imageSrc, 'medium')}
+            fallbacks={[ULTIMATE_FALLBACK]}
+            alt={name}
+            loading="lazy"
+          />
         </div>
       </Link>
 

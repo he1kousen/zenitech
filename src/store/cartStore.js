@@ -12,6 +12,7 @@ const buildLine = (product, variant, quantity) => ({
   variantId: variant.id,
   name: product.name,
   slug: product.slug,
+  categorySlug: product.category?.slug || null,
   price: Number(product.base_price) + Number(variant.price_modifier || 0),
   quantity,
   image: getPrimaryImage(product),

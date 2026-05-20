@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useCartStore } from '../../store/cartStore'
 import { useAuthContext } from '../../contexts/AuthContext'
 import { getImageUrl } from '../../lib/supabase'
+import { resolveProductImage, ULTIMATE_FALLBACK } from '../../lib/productImages'
+import SafeImage from './SafeImage'
 
 const formatRupiah = (n) => `Rp ${Number(n || 0).toLocaleString('id-ID')}`
 
@@ -107,6 +109,11 @@ function QuantityControl({ qty, stock, onDec, onInc }) {
 
 function CartItemRow({ item, onUpdateQty, onRemove }) {
   const variantLabel = [item.storage, item.color].filter(Boolean).join(' · ')
+  const resolvedImage = resolveProductImage({
+    slug: item.slug,
+    image_url: item.image,
+    category: item.categorySlug,
+  })
   return (
     <li
       className="flex"
@@ -125,16 +132,13 @@ function CartItemRow({ item, onUpdateQty, onRemove }) {
           overflow: 'hidden',
         }}
       >
-        {item.image ? (
-          <img
-            src={getImageUrl(item.image, 'thumb')}
-            alt={item.name}
-            loading="lazy"
-            style={{ width: '85%', height: '85%', objectFit: 'contain' }}
-          />
-        ) : (
-          <span className="text-caption text-ink-muted-48">N/A</span>
-        )}
+        <SafeImage
+          src={getImageUrl(resolvedImage, 'thumb')}
+          fallbacks={[ULTIMATE_FALLBACK]}
+          alt={item.name}
+          loading="lazy"
+          style={{ width: '85%', height: '85%', objectFit: 'contain' }}
+        />
       </div>
 
       <div className="flex flex-col" style={{ flex: 1, minWidth: 0, gap: 4 }}>

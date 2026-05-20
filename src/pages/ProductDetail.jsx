@@ -5,7 +5,9 @@ import { usePageMeta } from '../hooks/usePageMeta'
 import { useCartStore } from '../store/cartStore'
 import VariantSelector from '../components/store/VariantSelector'
 import SubNav from '../components/store/SubNav'
+import SafeImage from '../components/store/SafeImage'
 import { getImageUrl } from '../lib/supabase'
+import { resolveProductImage, ULTIMATE_FALLBACK } from '../lib/productImages'
 import { toast } from '../store/toastStore'
 
 const formatRupiah = (n) => `Rp${Number(n || 0).toLocaleString('id-ID')}`
@@ -16,15 +18,6 @@ const SPECS_FALLBACK = [
   { label: 'Cicilan', value: '0% hingga 12 bulan' },
   { label: 'Stok', value: 'Tersedia di gudang Jakarta' },
 ]
-
-const CATEGORY_FALLBACK_IMAGE = {
-  iphone: '/images/iphone.svg',
-  mac: '/images/macbook.svg',
-  ipad: '/images/ipad.svg',
-  'apple-watch': '/images/watch.svg',
-  watch: '/images/watch.svg',
-  aksesoris: '/images/airpods.svg',
-}
 
 function StockInfo({ stock }) {
   if (stock == null) return null
@@ -157,10 +150,11 @@ function NotFound() {
 function resolveImages(product) {
   const images = product?.images || []
   if (images.length > 0) return images
-  const slug = typeof product?.category?.slug === 'string'
-    ? product.category.slug
-    : null
-  const fallback = CATEGORY_FALLBACK_IMAGE[slug] || '/images/iphone.svg'
+  const fallback = resolveProductImage({
+    slug: product?.slug,
+    image_url: null,
+    category: product?.category?.slug,
+  })
   return [{ id: 'fallback', url: fallback }]
 }
 
@@ -299,6 +293,11 @@ export default function ProductDetail() {
 
   const images = resolveImages(product)
   const primaryImage = images[activeImageIdx] || images[0]
+  const primaryResolved = resolveProductImage({
+    slug: product.slug,
+    image_url: primaryImage?.url,
+    category: product.category?.slug,
+  })
   const ctaDisabled = !variantSelected || isOutOfStock || adding
 
   const subNavCta = {
@@ -394,8 +393,9 @@ export default function ProductDetail() {
               }}
             >
               {primaryImage?.url ? (
-                <img
-                  src={getImageUrl(primaryImage.url, 'full')}
+                <SafeImage
+                  src={getImageUrl(primaryResolved, 'full')}
+                  fallbacks={[ULTIMATE_FALLBACK]}
                   alt={product.name}
                   className="product-shadow"
                   style={{
@@ -414,6 +414,11 @@ export default function ProductDetail() {
               <div className="flex flex-wrap" style={{ gap: 8, justifyContent: 'center' }}>
                 {images.map((img, idx) => {
                   const isActive = idx === activeImageIdx
+                  const thumbResolved = resolveProductImage({
+                    slug: product.slug,
+                    image_url: img.url,
+                    category: product.category?.slug,
+                  })
                   return (
                     <button
                       key={img.id || idx}
@@ -436,8 +441,9 @@ export default function ProductDetail() {
                         transition: 'border-color 0.15s ease',
                       }}
                     >
-                      <img
-                        src={getImageUrl(img.url, 'thumb')}
+                      <SafeImage
+                        src={getImageUrl(thumbResolved, 'thumb')}
+                        fallbacks={[ULTIMATE_FALLBACK]}
                         alt=""
                         loading="lazy"
                         style={{
