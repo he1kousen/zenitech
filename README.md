@@ -2,7 +2,7 @@
 
 Apple Authorized Reseller — e-commerce platform untuk pasar Indonesia.
 
-> Belanja resmi iPhone, Mac, iPad, Apple Watch, dan aksesoris Apple. Pembayaran aman via Midtrans, pengiriman ke seluruh Indonesia.
+Belanja resmi iPhone, Mac, iPad, Apple Watch, dan aksesoris Apple. Pembayaran aman via Midtrans, pengiriman ke seluruh Indonesia.
 
 ## Tech Stack
 
@@ -77,7 +77,7 @@ zenitech/
 │   └── main.jsx
 ├── supabase/
 │   ├── migrations/            # SQL migrations (schema, RLS, triggers)
-│   ├── functions/             # Edge Functions (create-payment, midtrans-webhook)
+│   ├── functions/             # Edge Functions (create-payment)
 │   ├── seed.sql               # Categories, products, variants, images
 │   └── storage-policies.sql   # Storage bucket policies
 ├── public/                    # Static assets disajikan apa adanya
@@ -151,11 +151,9 @@ supabase link --project-ref <YOUR_PROJECT_REF>
 # Deploy fungsi pembayaran (Midtrans Snap)
 supabase functions deploy create-payment
 
-# Deploy webhook handler (Midtrans → Supabase)
-supabase functions deploy midtrans-webhook --no-verify-jwt
 ```
 
-`midtrans-webhook` perlu `--no-verify-jwt` karena dipanggil oleh server Midtrans, bukan oleh user terotentikasi.
+
 
 #### 4d. Set secrets untuk Edge Functions
 
@@ -210,9 +208,8 @@ Edge Functions (di-set via `supabase secrets set`):
 - Product detail dengan gallery, variant selector (storage + warna), dan sticky bar di mobile
 - Shopping cart dengan persistent state (Zustand + localStorage)
 - Checkout: form alamat, pilih pengiriman, integrasi Midtrans Snap via Edge Function
-- Webhook handler dengan verifikasi SHA-512 signature
 - Order management buyer: tracking 4-step, history, detail
-- Auth: email/password + Google OAuth-ready
+- Auth (Email/Password)
 - Admin dashboard (CRUD Kategori, Produk, Orders)
 - Design system Apple-inspired (single accent #0066cc, SF Pro typography, photography-first)
 - Animasi interaktif secara global (*smooth scrolling*, *page transitions*, *staggered reveals*) menggunakan Framer Motion, GSAP, dan Lenis.
@@ -225,8 +222,7 @@ Edge Functions (di-set via `supabase secrets set`):
 | 2 — Catalog (home, products, detail, cart) | Done |
 | 2.5 — Aesthetic redesign (Apple-style) | Done |
 | 3 — Checkout & order management | Done |
-| 4 — Admin dashboard & deploy | Done |
-| 5 — Global Animations (Framer Motion, GSAP, Lenis) | Done |
+| 4 — Global Animations (Framer Motion, GSAP, Lenis) | Done |
 
 ## License
 
