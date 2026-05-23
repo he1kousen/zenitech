@@ -19,7 +19,6 @@ Apple Authorized Reseller — e-commerce platform untuk pasar Indonesia.
 
 ## Screenshot
 
-<<<<<<< HEAD
 Home Page
 ![home](images/preview/home.png)
 ![home2](images/preview/home2.png)
@@ -40,8 +39,6 @@ Checkout
 
 Orders
 ![orders](images/preview/orders.png)
-=======
->>>>>>> b866c671ef4070fec0dd1c28840b5ba688c3d8b2
 
 
 ## Project Structure
