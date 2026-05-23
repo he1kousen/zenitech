@@ -16,12 +16,10 @@ Apple Authorized Reseller — e-commerce platform untuk pasar Indonesia.
 - **Routing**: React Router v6
 - **Deploy**: Vercel (frontend) + Supabase (backend)
 
-## Demo
-
-Live: _isi setelah deploy_ (mis. https://zenitech.vercel.app)
 
 ## Screenshot
 
+<<<<<<< HEAD
 Home Page
 ![home](images/preview/home.png)
 ![home2](images/preview/home2.png)
@@ -42,6 +40,8 @@ Checkout
 
 Orders
 ![orders](images/preview/orders.png)
+=======
+>>>>>>> b866c671ef4070fec0dd1c28840b5ba688c3d8b2
 
 
 ## Project Structure
