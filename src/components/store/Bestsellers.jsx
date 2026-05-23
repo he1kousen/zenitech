@@ -1,6 +1,8 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useProducts } from '../../hooks/useProducts'
 import ProductCard from './ProductCard'
+import { useScrollAnimation } from '../../hooks/useScrollAnimation'
 
 function FlatSkeleton() {
   return (
@@ -15,11 +17,14 @@ function FlatSkeleton() {
 
 export default function Bestsellers({ title = 'Bestsellers', linkLabel = 'See all products', linkTo = '/products', limit = 8 }) {
   const { products, loading, error } = useProducts({ pageSize: limit })
+  const headerRef = useRef(null)
+
+  useScrollAnimation(headerRef, { y: 30, duration: 0.6 })
 
   return (
     <section className="bestsellers">
       <div className="bestsellers__inner">
-        <header className="bestsellers__header">
+        <header className="bestsellers__header" ref={headerRef} style={{ opacity: 0 }}>
           <h2 className="bestsellers__title">{title}</h2>
           <Link to={linkTo} className="bestsellers__more active-scale">
             {linkLabel} →
@@ -99,7 +104,7 @@ export default function Bestsellers({ title = 'Bestsellers', linkLabel = 'See al
           color: inherit;
         }
         .product-card-flat__image {
-          background-color: #f5f5f7;
+          background-color: #ffffff;
           border-radius: 14px;
           aspect-ratio: 1 / 1;
           display: flex;
@@ -118,6 +123,7 @@ export default function Bestsellers({ title = 'Bestsellers', linkLabel = 'See al
           width: auto;
           height: auto;
           object-fit: contain;
+          mix-blend-mode: multiply;
         }
         .product-card-flat__category {
           font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;

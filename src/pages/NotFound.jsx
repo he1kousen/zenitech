@@ -11,7 +11,7 @@ export default function NotFound() {
     <main
       style={{
         minHeight: '100vh',
-        background: '#f5f5f7',
+        background: '#ffffff',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

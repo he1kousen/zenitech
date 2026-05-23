@@ -344,7 +344,7 @@ export default function OrderDetail({ open, orderId, onClose, onUpdated }) {
     >
       <div
         style={{
-          background: '#f5f5f7',
+          background: '#ffffff',
           borderRadius: 18,
           width: '100%',
           maxWidth: 720,

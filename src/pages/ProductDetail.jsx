@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import gsap from '../lib/gsap'
 import { useProduct } from '../hooks/useProduct'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { useCartStore } from '../store/cartStore'
@@ -110,7 +112,7 @@ function NotFound() {
   return (
     <main
       className="flex items-center justify-center"
-      style={{ minHeight: 'calc(100vh - 96px)', padding: 24, backgroundColor: '#f5f5f7' }}
+      style={{ minHeight: 'calc(100vh - 96px)', padding: 24, backgroundColor: '#ffffff' }}
     >
       <div className="text-center" style={{ maxWidth: 480 }}>
         <p
@@ -179,8 +181,10 @@ export default function ProductDetail() {
   const [adding, setAdding] = useState(false)
   const [addedFlash, setAddedFlash] = useState(false)
   const [showStickyBar, setShowStickyBar] = useState(false)
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const ctaRef = useRef(null)
+  const priceRef = useRef(null)
 
   useEffect(() => {
     if (!product || !product.variants?.length) return
@@ -224,6 +228,21 @@ export default function ProductDetail() {
     const modifier = selectedVariant?.price_modifier || 0
     return Number(product.base_price) + Number(modifier)
   }, [product, selectedVariant])
+
+  useEffect(() => {
+    if (!product || !priceRef.current || prefersReducedMotion) return
+    const obj = { val: 0 }
+    gsap.to(obj, {
+      val: finalPrice,
+      duration: 1.2,
+      ease: "power2.out",
+      onUpdate: () => {
+        if (priceRef.current) {
+          priceRef.current.innerText = `Mulai dari Rp${Math.round(obj.val).toLocaleString('id-ID')}`
+        }
+      }
+    })
+  }, [finalPrice, product, prefersReducedMotion])
 
   const handleAddToCart = async () => {
     if (!product || !variantSelected || isOutOfStock) return
@@ -275,7 +294,7 @@ export default function ProductDetail() {
     return (
       <main
         className="flex items-center justify-center"
-        style={{ minHeight: 'calc(100vh - 96px)', padding: 24, backgroundColor: '#f5f5f7' }}
+        style={{ minHeight: 'calc(100vh - 96px)', padding: 24, backgroundColor: '#ffffff' }}
       >
         <div className="text-center">
           <p style={{ color: '#b00020', marginBottom: 17 }}>
@@ -313,7 +332,7 @@ export default function ProductDetail() {
         {/* Headline section (parchment) */}
         <section
           style={{
-            backgroundColor: '#f5f5f7',
+            backgroundColor: '#ffffff',
             padding: '40px 22px 24px',
             textAlign: 'center',
           }}
@@ -351,7 +370,10 @@ export default function ProductDetail() {
             </h1>
 
             {product.description && (
-              <p
+              <motion.p
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
                 style={{
                   fontFamily: "'SF Pro Display', system-ui, -apple-system, sans-serif",
                   fontSize: 'clamp(17px, 2vw, 21px)',
@@ -364,7 +386,7 @@ export default function ProductDetail() {
                 }}
               >
                 {product.description.split('\n')[0]}
-              </p>
+              </motion.p>
             )}
           </div>
         </section>
@@ -385,29 +407,40 @@ export default function ProductDetail() {
                 width: '100%',
                 aspectRatio: '1 / 1',
                 borderRadius: 18,
-                backgroundColor: '#f5f5f7',
+                backgroundColor: '#ffffff',
                 overflow: 'hidden',
                 marginBottom: 12,
                 position: 'sticky',
                 top: 110,
               }}
             >
-              {primaryImage?.url ? (
-                <SafeImage
-                  src={getImageUrl(primaryResolved, 'full')}
-                  fallbacks={[ULTIMATE_FALLBACK]}
-                  alt={product.name}
-                  className="product-shadow"
-                  style={{
-                    maxWidth: '78%',
-                    maxHeight: '78%',
-                    objectFit: 'contain',
-                    display: 'block',
-                  }}
-                />
-              ) : (
-                <span style={{ color: '#a1a1a6' }}>Tidak ada gambar</span>
-              )}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeImageIdx}
+                  initial={prefersReducedMotion ? false : { opacity: 0 }}
+                  animate={prefersReducedMotion ? false : { opacity: 1 }}
+                  exit={prefersReducedMotion ? false : { opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  {primaryImage?.url ? (
+                    <SafeImage
+                      src={getImageUrl(primaryResolved, 'full')}
+                      fallbacks={[ULTIMATE_FALLBACK]}
+                      alt={product.name}
+                      className="product-shadow"
+                      style={{
+                        maxWidth: '78%',
+                        maxHeight: '78%',
+                        objectFit: 'contain',
+                        display: 'block',
+                      }}
+                    />
+                  ) : (
+                    <span style={{ color: '#a1a1a6' }}>Tidak ada gambar</span>
+                  )}
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {images.length > 1 && (
@@ -460,8 +493,17 @@ export default function ProductDetail() {
           </section>
 
           {/* Info */}
-          <section className="pdp-info">
-            <p
+          <motion.section 
+            className="pdp-info"
+            initial={prefersReducedMotion ? false : "hidden"}
+            animate={prefersReducedMotion ? false : "visible"}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } }
+            }}
+          >
+            <motion.p
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               style={{
                 fontFamily: "'SF Pro Text', system-ui, -apple-system, sans-serif",
                 fontSize: 14,
@@ -471,9 +513,11 @@ export default function ProductDetail() {
               }}
             >
               Konfigurasi & beli
-            </p>
+            </motion.p>
 
-            <h2
+            <motion.h2
+              ref={priceRef}
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               style={{
                 fontFamily: "'SF Pro Display', system-ui, -apple-system, sans-serif",
                 fontSize: 28,
@@ -485,9 +529,10 @@ export default function ProductDetail() {
               }}
             >
               Mulai dari {formatRupiah(finalPrice)}
-            </h2>
+            </motion.h2>
 
-            <p
+            <motion.p
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               style={{
                 fontFamily: "'SF Pro Text', system-ui, -apple-system, sans-serif",
                 fontSize: 14,
@@ -497,7 +542,7 @@ export default function ProductDetail() {
               }}
             >
               atau cicilan 0% mulai Rp{Math.round(finalPrice / 12).toLocaleString('id-ID')}/bulan selama 12 bulan
-            </p>
+            </motion.p>
 
             {/* Variants */}
             {hasVariants && (
@@ -558,7 +603,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Tabs */}
-            <div>
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
               <div
                 role="tablist"
                 className="flex"
@@ -650,8 +695,8 @@ export default function ProductDetail() {
                   </dl>
                 )}
               </div>
-            </div>
-          </section>
+            </motion.div>
+          </motion.section>
         </div>
 
         {/* Floating sticky bar — frosted glass */}

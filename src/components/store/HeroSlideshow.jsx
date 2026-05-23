@@ -1,45 +1,48 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { PRODUCT_IMAGES } from '../../lib/productImages'
 import SafeImage from './SafeImage'
+import AnimatedText from '../ui/AnimatedText'
+import AnimatedButton from '../ui/AnimatedButton'
 
 const SLIDES = [
   {
     id: 'iphone',
-    eyebrow: 'iPhone 16 Pro Max',
-    title: 'High-Quality Tech.\nCrafted for life.',
-    subtitle: 'Belanja koleksi resmi iPhone, Mac, iPad, dan aksesoris Apple di Indonesia.',
+    eyebrow: 'iPhone 15 Pro Max',
+    title: 'Titanium.\nKuat. Ringan. Pro.',
+    subtitle: 'Chip A17 Pro yang revolusioner. Kamera kelas pro. Desain titanium aerospace.',
     cta: { label: 'Shop Now', to: '/products' },
-    bg: 'linear-gradient(135deg, #d6dcff 0%, #c5d0ff 50%, #b8c6ff 100%)',
+    bg: '#ffffff',
     backdropText: 'BESTSELLER',
-    image: PRODUCT_IMAGES['iphone-16-pro-max'],
-    imageAlt: 'iPhone 16 Pro Max',
+    image: PRODUCT_IMAGES['iphone-15-pro-max'],
+    imageAlt: 'iPhone 15 Pro Max',
   },
   {
     id: 'mac',
-    eyebrow: 'MacBook Pro M4',
-    title: 'Tenaga Pro.\nDimana saja.',
-    subtitle: 'Chip M4 Pro yang ultra-cepat, layar Liquid Retina XDR, dan baterai sepanjang hari.',
+    eyebrow: 'MacBook Air M2',
+    title: 'Ringan.\nNamun bertenaga.',
+    subtitle: 'MacBook Air tertipis di dunia dengan chip M2 yang super cepat.',
     cta: { label: 'Shop Now', to: '/products?category=mac' },
-    bg: 'linear-gradient(135deg, #fce4d8 0%, #f9d6c2 50%, #f5c8ad 100%)',
-    backdropText: 'PRO',
-    image: PRODUCT_IMAGES['macbook-pro-m4-14'],
-    imageAlt: 'MacBook Pro M4',
+    bg: '#ffffff',
+    backdropText: 'M2',
+    image: PRODUCT_IMAGES['macbook-air-m2'],
+    imageAlt: 'MacBook Air M2',
   },
   {
-    id: 'ipad',
-    eyebrow: 'iPad Pro M4',
-    title: 'Tipis. Ringan.\nAjaib.',
-    subtitle: 'iPad paling powerful dengan chip M4 dan layar Ultra Retina XDR.',
-    cta: { label: 'Shop Now', to: '/products?category=ipad' },
-    bg: 'linear-gradient(135deg, #d4e7f5 0%, #bcd8ee 50%, #a5cae8 100%)',
-    backdropText: 'NEW',
-    image: PRODUCT_IMAGES['ipad-pro-m4-11'],
-    imageAlt: 'iPad Pro M4',
+    id: 'watch',
+    eyebrow: 'Apple Watch Nike S3',
+    title: 'Partner\nOlahraga Anda.',
+    subtitle: 'Pantau aktivitas. Ukur olahraga. Didesain untuk pelari.',
+    cta: { label: 'Shop Now', to: '/products?category=apple-watch' },
+    bg: '#ffffff',
+    backdropText: 'NIKE',
+    image: PRODUCT_IMAGES['apple-watch-nike-s3'],
+    imageAlt: 'Apple Watch Nike Series 3',
   },
 ]
 
-const AUTO_MS = 6000
+const AUTO_MS = 5000
 
 export default function HeroSlideshow() {
   const [active, setActive] = useState(0)
@@ -73,23 +76,62 @@ export default function HeroSlideshow() {
             </div>
 
             <div className="hero-slide__content">
-              <div className="hero-slide__copy">
-                <p className="hero-slide__eyebrow">{s.eyebrow}</p>
-                <h1 className="hero-slide__title">{s.title}</h1>
-                <p className="hero-slide__subtitle">{s.subtitle}</p>
-                <Link to={s.cta.to} className="hero-slide__cta active-scale">
-                  {s.cta.label}
-                </Link>
-              </div>
+              <AnimatePresence mode="wait">
+                {i === active && (
+                  <motion.div
+                    key={`copy-${s.id}`}
+                    className="hero-slide__copy"
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    variants={{
+                      visible: { transition: { staggerChildren: 0.1 } },
+                      hidden: { transition: { staggerChildren: 0.05, staggerDirection: -1 } }
+                    }}
+                  >
+                    <motion.p
+                      className="hero-slide__eyebrow"
+                      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                    >
+                      {s.eyebrow}
+                    </motion.p>
+                    <h1 className="hero-slide__title">
+                      <AnimatedText animation="splitWords" delay={0.1}>{s.title}</AnimatedText>
+                    </h1>
+                    <motion.p
+                      className="hero-slide__subtitle"
+                      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                    >
+                      {s.subtitle}
+                    </motion.p>
+                    <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+                      <AnimatedButton as={Link} to={s.cta.to} className="hero-slide__cta">
+                        {s.cta.label}
+                      </AnimatedButton>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-              <div className="hero-slide__media">
-                <SafeImage
-                  src={s.image}
-                  fallbacks={[PRODUCT_IMAGES['iphone-16-pro-max']]}
-                  alt={s.imageAlt}
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                />
-              </div>
+              <AnimatePresence mode="wait">
+                {i === active && (
+                  <motion.div
+                    className="hero-slide__media"
+                    key={`img-${s.id}`}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                  >
+                    <SafeImage
+                      src={s.image}
+                      fallbacks={[PRODUCT_IMAGES['iphone-16-pro-max']]}
+                      alt={s.imageAlt}
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </article>
         ))}
@@ -142,7 +184,7 @@ export default function HeroSlideshow() {
           font-weight: 700;
           letter-spacing: -0.02em;
           line-height: 0.9;
-          color: rgba(255, 255, 255, 0.55);
+          color: rgba(0, 0, 0, 0.04);
           pointer-events: none;
           white-space: nowrap;
           user-select: none;
@@ -220,7 +262,7 @@ export default function HeroSlideshow() {
           width: auto;
           height: auto;
           object-fit: contain;
-          filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.18));
+          mix-blend-mode: multiply;
         }
 
         .hero-slideshow__dots {
@@ -250,6 +292,7 @@ export default function HeroSlideshow() {
 
         @media (max-width: 834px) {
           .hero-slideshow { padding: 12px 12px 0; }
+          .hero-slideshow__viewport { height: 640px; }
           .hero-slide__content {
             grid-template-columns: 1fr;
             gap: 8px;
@@ -258,7 +301,7 @@ export default function HeroSlideshow() {
           }
           .hero-slide__copy { text-align: center; margin: 0 auto; }
           .hero-slide__subtitle { margin-left: auto; margin-right: auto; }
-          .hero-slide__media { height: 48%; }
+          .hero-slide__media { height: 45%; }
           .hero-slideshow__dots {
             position: static;
             transform: none;

@@ -1,14 +1,16 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import { useAuthContext } from './contexts/AuthContext'
 import LoadingScreen from './components/ui/LoadingScreen'
 import GlobalNav from './components/store/GlobalNav'
 import CartDrawer from './components/store/CartDrawer'
+import PageTransition from './components/ui/PageTransition'
 
 // Eager-loaded: AdminLayout dipakai sebagai wrapper di AdminRoute, harus tersedia segera.
 import AdminLayout from './components/admin/AdminLayout'
 
-// Lazy-loaded pages — code-split per route untuk bundle yang lebih kecil.
+// Lazy-loaded pages
 const Home = lazy(() => import('./pages/Home'))
 const Products = lazy(() => import('./pages/Products'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
@@ -25,41 +27,21 @@ const AdminProducts = lazy(() => import('./pages/admin/Products'))
 const AdminOrders = lazy(() => import('./pages/admin/Orders'))
 const AdminCategories = lazy(() => import('./pages/admin/Categories'))
 
-// Protected Route - requires authentication
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuthContext()
-
-  if (loading) {
-    return <LoadingScreen />
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
-
+  if (loading) return <LoadingScreen />
+  if (!user) return <Navigate to="/login" replace />
   return children
 }
 
-// Admin Route - requires admin role + wrap dengan AdminLayout
 function AdminRoute({ children }) {
   const { user, role, loading } = useAuthContext()
-
-  if (loading) {
-    return <LoadingScreen />
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
-
-  if (role !== 'admin') {
-    return <Navigate to="/" replace />
-  }
-
+  if (loading) return <LoadingScreen />
+  if (!user) return <Navigate to="/login" replace />
+  if (role !== 'admin') return <Navigate to="/" replace />
   return <AdminLayout>{children}</AdminLayout>
 }
 
-// GlobalNav muncul di semua halaman kecuali admin & auth pages
 function ConditionalNav() {
   const { pathname } = useLocation()
   const hideNav = pathname.startsWith('/admin') || pathname === '/login' || pathname === '/register'
@@ -67,13 +49,45 @@ function ConditionalNav() {
   return <GlobalNav />
 }
 
-// CartDrawer di-render di luar Routes, di-mount sekali, kontrol via Zustand isOpen.
-// Di-hide di halaman admin & auth — sama seperti GlobalNav.
 function ConditionalCartDrawer() {
   const { pathname } = useLocation()
   const hide = pathname.startsWith('/admin') || pathname === '/login' || pathname === '/register'
   if (hide) return null
   return <CartDrawer />
+}
+
+function AnimatedRoutes() {
+  const location = useLocation()
+  
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        {/* Public Routes */}
+        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+        <Route path="/products" element={<PageTransition><Products /></PageTransition>} />
+        <Route path="/products/:slug" element={<PageTransition><ProductDetail /></PageTransition>} />
+        <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
+        <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+        <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
+
+        {/* Protected Routes */}
+        <Route path="/checkout" element={<ProtectedRoute><PageTransition><Checkout /></PageTransition></ProtectedRoute>} />
+        <Route path="/order-success" element={<ProtectedRoute><PageTransition><OrderSuccess /></PageTransition></ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute><PageTransition><Orders /></PageTransition></ProtectedRoute>} />
+        <Route path="/orders/:id" element={<ProtectedRoute><PageTransition><OrderDetail /></PageTransition></ProtectedRoute>} />
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminRoute><PageTransition><Dashboard /></PageTransition></AdminRoute>} />
+        <Route path="/admin/dashboard" element={<AdminRoute><PageTransition><Dashboard /></PageTransition></AdminRoute>} />
+        <Route path="/admin/products" element={<AdminRoute><PageTransition><AdminProducts /></PageTransition></AdminRoute>} />
+        <Route path="/admin/orders" element={<AdminRoute><PageTransition><AdminOrders /></PageTransition></AdminRoute>} />
+        <Route path="/admin/categories" element={<AdminRoute><PageTransition><AdminCategories /></PageTransition></AdminRoute>} />
+
+        {/* 404 */}
+        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  )
 }
 
 export default function Router() {
@@ -82,94 +96,7 @@ export default function Router() {
       <ConditionalNav />
       <ConditionalCartDrawer />
       <Suspense fallback={<LoadingScreen />}>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:slug" element={<ProductDetail />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
-          {/* Protected Routes - require authentication */}
-          <Route
-            path="/checkout"
-            element={
-              <ProtectedRoute>
-                <Checkout />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/order-success"
-            element={
-              <ProtectedRoute>
-                <OrderSuccess />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              <ProtectedRoute>
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders/:id"
-            element={
-              <ProtectedRoute>
-                <OrderDetail />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Admin Routes - require admin role */}
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <Dashboard />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <AdminRoute>
-                <Dashboard />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/products"
-            element={
-              <AdminRoute>
-                <AdminProducts />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/orders"
-            element={
-              <AdminRoute>
-                <AdminOrders />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/categories"
-            element={
-              <AdminRoute>
-                <AdminCategories />
-              </AdminRoute>
-            }
-          />
-
-          {/* 404 catch-all */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnimatedRoutes />
       </Suspense>
     </BrowserRouter>
   )

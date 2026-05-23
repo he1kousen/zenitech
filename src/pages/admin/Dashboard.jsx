@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
+import AnimatedText from '../../components/ui/AnimatedText'
 import {
   formatRupiah,
   formatDateShort,
@@ -103,6 +105,8 @@ function TableSkeleton({ rows = 5 }) {
 }
 
 function OrdersTable({ orders, loading }) {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   return (
     <div
       style={{
@@ -169,9 +173,19 @@ function OrdersTable({ orders, loading }) {
               </tr>
             </tbody>
           ) : (
-            <tbody>
+            <motion.tbody
+              initial={prefersReducedMotion ? false : "hidden"}
+              animate={prefersReducedMotion ? false : "visible"}
+              variants={{
+                visible: { transition: { staggerChildren: 0.05 } },
+                hidden: {}
+              }}
+            >
               {orders.map((order) => (
-                <tr key={order.id}>
+                <motion.tr 
+                  key={order.id}
+                  variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
+                >
                   <td
                     className="text-caption-strong text-ink"
                     style={{
@@ -226,9 +240,9 @@ function OrdersTable({ orders, loading }) {
                   >
                     {formatDateShort(order.created_at)}
                   </td>
-                </tr>
+                </motion.tr>
               ))}
-            </tbody>
+            </motion.tbody>
           )}
         </table>
       </div>
@@ -356,7 +370,7 @@ export default function Dashboard() {
     <div>
       <header style={{ marginBottom: 32 }}>
         <h1 className="text-display-md text-ink" style={{ margin: 0 }}>
-          Dashboard
+          <AnimatedText animation="splitWords">Dashboard</AnimatedText>
         </h1>
         <p
           className="text-body-base text-ink-muted-48"

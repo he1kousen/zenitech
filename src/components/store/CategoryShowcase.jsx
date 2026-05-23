@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { PRODUCT_IMAGES } from '../../lib/productImages'
 import SafeImage from './SafeImage'
 
@@ -7,52 +8,64 @@ const TILES = [
     id: 'mac',
     label: 'Mac',
     href: '/products?category=mac',
-    image: PRODUCT_IMAGES['macbook-air-m3-13'],
+    image: PRODUCT_IMAGES['macbook-air-m2'],
     span: 'wide',
   },
   {
     id: 'iphone',
     label: 'iPhone',
     href: '/products?category=iphone',
-    image: PRODUCT_IMAGES['iphone-16-pro-max'],
+    image: PRODUCT_IMAGES['iphone-15-pro-max'],
     span: 'half',
   },
   {
     id: 'aksesoris',
     label: 'Aksesoris',
     href: '/products?category=aksesoris',
-    image: PRODUCT_IMAGES['airpods-pro-2'],
-    span: 'half',
-  },
-  {
-    id: 'ipad',
-    label: 'iPad',
-    href: '/products?category=ipad',
-    image: PRODUCT_IMAGES['ipad-pro-m4-11'],
+    image: PRODUCT_IMAGES['beats-studio-elite'],
     span: 'half',
   },
   {
     id: 'apple-watch',
     label: 'Apple Watch',
     href: '/products?category=apple-watch',
-    image: PRODUCT_IMAGES['apple-watch-series-10'],
+    image: PRODUCT_IMAGES['apple-watch-nike-s3'],
     span: 'half',
   },
 ]
 
 export default function CategoryShowcase() {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const MotionLink = motion(Link)
+
   return (
     <section className="cat-showcase">
-      <div className="cat-grid">
+      <motion.div 
+        className="cat-grid"
+        initial={prefersReducedMotion ? false : "hidden"}
+        whileInView={prefersReducedMotion ? false : "visible"}
+        viewport={{ once: true, margin: "-50px" }}
+        variants={{
+          visible: { transition: { staggerChildren: 0.1 } },
+          hidden: {}
+        }}
+      >
         {TILES.map((t) => (
-          <Link
+          <MotionLink
             to={t.href}
             key={t.id}
-            className={`cat-tile cat-tile--${t.span}`}
+            className={`cat-tile cat-tile--${t.span} group`}
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+            }}
+            whileHover={prefersReducedMotion ? {} : { y: -4, boxShadow: "0 20px 40px rgba(0,0,0,0.08)" }}
           >
             <div className="cat-tile__copy">
               <h3 className="cat-tile__label">{t.label}</h3>
-              <span className="cat-tile__link">Selengkapnya ›</span>
+              <span className="cat-tile__link relative overflow-hidden group-hover:text-[#0066cc] transition-colors">
+                Selengkapnya ›
+              </span>
             </div>
             <div className="cat-tile__image">
               <SafeImage
@@ -60,11 +73,12 @@ export default function CategoryShowcase() {
                 fallbacks={[PRODUCT_IMAGES['iphone-16-pro-max']]}
                 alt={t.label}
                 loading="lazy"
+                className="transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </div>
-          </Link>
+          </MotionLink>
         ))}
-      </div>
+      </motion.div>
 
       <style>{`
         .cat-showcase {
@@ -79,7 +93,7 @@ export default function CategoryShowcase() {
         }
         .cat-tile {
           position: relative;
-          background-color: #f5f5f7;
+          background-color: #ffffff;
           border-radius: 18px;
           overflow: hidden;
           min-height: 280px;
@@ -135,6 +149,7 @@ export default function CategoryShowcase() {
           width: auto;
           height: auto;
           object-fit: contain;
+          mix-blend-mode: multiply;
         }
         .cat-tile--wide .cat-tile__image {
           width: 65%;

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useCartStore } from '../../store/cartStore'
 import { useAuthContext } from '../../contexts/AuthContext'
 import { getImageUrl } from '../../lib/supabase'
@@ -108,6 +109,7 @@ function QuantityControl({ qty, stock, onDec, onInc }) {
 }
 
 function CartItemRow({ item, onUpdateQty, onRemove }) {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const variantLabel = [item.storage, item.color].filter(Boolean).join(' · ')
   const resolvedImage = resolveProductImage({
     slug: item.slug,
@@ -115,9 +117,14 @@ function CartItemRow({ item, onUpdateQty, onRemove }) {
     category: item.categorySlug,
   })
   return (
-    <li
+    <motion.li
+      layout
+      initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
+      animate={prefersReducedMotion ? false : { opacity: 1, x: 0 }}
+      exit={prefersReducedMotion ? false : { opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0, borderBottomWidth: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className="flex"
-      style={{ gap: 12, padding: '17px 0', borderBottom: '1px solid #f0f0f0' }}
+      style={{ gap: 12, padding: '17px 0', borderBottom: '1px solid #f0f0f0', overflow: 'hidden' }}
     >
       <div
         style={{
@@ -190,7 +197,7 @@ function CartItemRow({ item, onUpdateQty, onRemove }) {
           </button>
         </div>
       </div>
-    </li>
+    </motion.li>
   )
 }
 
@@ -264,43 +271,46 @@ export default function CartDrawer() {
   const isEmpty = items.length === 0
 
   return (
-    <>
-      {/* Overlay */}
-      <div
-        onClick={closeCart}
-        aria-hidden="true"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          opacity: isOpen ? 1 : 0,
-          pointerEvents: isOpen ? 'auto' : 'none',
-          transition: 'opacity 300ms ease',
-          zIndex: 80,
-        }}
-      />
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            exit={{ opacity: 0 }}
+            onClick={closeCart}
+            aria-hidden="true"
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: '#000000',
+              zIndex: 80,
+            }}
+          />
 
-      {/* Drawer */}
-      <aside
-        role="dialog"
-        aria-label="Keranjang belanja"
-        aria-modal="true"
-        aria-hidden={!isOpen}
-        className="cart-drawer-panel bg-canvas flex flex-col"
-        style={{
-          position: 'fixed',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: '100%',
-          maxWidth: 420,
-          backgroundColor: '#ffffff',
-          transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
-          transition: 'transform 300ms ease',
-          zIndex: 90,
-          boxShadow: 'rgba(0,0,0,0.08) -2px 0 20px',
-        }}
-      >
+          {/* Drawer */}
+          <motion.aside
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            role="dialog"
+            aria-label="Keranjang belanja"
+            aria-modal="true"
+            className="cart-drawer-panel bg-canvas flex flex-col"
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              width: '100%',
+              maxWidth: 420,
+              backgroundColor: '#ffffff',
+              zIndex: 90,
+              boxShadow: 'rgba(0,0,0,0.08) -2px 0 20px',
+            }}
+          >
         {/* Header */}
         <header
           className="flex items-center justify-between"
@@ -355,14 +365,16 @@ export default function CartDrawer() {
               }}
             >
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {items.map((item) => (
-                  <CartItemRow
-                    key={`${item.productId}-${item.variantId}`}
-                    item={item}
-                    onUpdateQty={updateQuantity}
-                    onRemove={removeItem}
-                  />
-                ))}
+                <AnimatePresence initial={false}>
+                  {items.map((item) => (
+                    <CartItemRow
+                      key={`${item.productId}-${item.variantId}`}
+                      item={item}
+                      onUpdateQty={updateQuantity}
+                      onRemove={removeItem}
+                    />
+                  ))}
+                </AnimatePresence>
               </ul>
             </div>
 
@@ -400,7 +412,9 @@ export default function CartDrawer() {
             </footer>
           </>
         )}
-      </aside>
-    </>
+      </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
   )
 }

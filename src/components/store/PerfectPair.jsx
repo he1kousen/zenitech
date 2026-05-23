@@ -73,7 +73,7 @@ export default function PerfectPair() {
 
         <div
           style={{
-            backgroundColor: '#f5f5f7',
+            backgroundColor: '#ffffff',
             borderRadius: 18,
             padding: 'clamp(24px, 4vw, 48px)',
           }}

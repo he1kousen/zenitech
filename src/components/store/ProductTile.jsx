@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom'
 
 const VARIANT_STYLES = {
   light: { bg: '#ffffff', text: '#1d1d1f', muted: '#6e6e73', linkColor: '#0066cc' },
-  parchment: { bg: '#f5f5f7', text: '#1d1d1f', muted: '#6e6e73', linkColor: '#0066cc' },
+  parchment: { bg: '#ffffff', text: '#1d1d1f', muted: '#6e6e73', linkColor: '#0066cc' },
   dark: { bg: '#1d1d1f', text: '#f5f5f7', muted: '#a1a1a6', linkColor: '#2997ff' },
   'dark-2': { bg: '#2a2a2c', text: '#f5f5f7', muted: '#a1a1a6', linkColor: '#2997ff' },
 }

@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useProducts } from '../hooks/useProducts'
 import { useCategories } from '../hooks/useCategories'
 import { usePageMeta } from '../hooks/usePageMeta'
 import ProductCard from '../components/store/ProductCard'
 import ProductFilter from '../components/store/ProductFilter'
 import SearchBar from '../components/store/SearchBar'
-import SubNav from '../components/store/SubNav'
 
 const PAGE_SIZE = 12
 
@@ -177,6 +177,7 @@ function Pagination({ page, totalPages, onChange }) {
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { categories } = useCategories()
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const categorySlug = searchParams.get('category') || ''
   const minParam = searchParams.get('min')
@@ -221,20 +222,6 @@ export default function Products() {
   })
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
-
-  const subNavTitle = useMemo(() => {
-    if (!categorySlug) return 'Store'
-    const cat = categories.find((c) => c.slug === categorySlug)
-    return cat?.name || 'Store'
-  }, [categorySlug, categories])
-
-  const subNavLinks = useMemo(() => {
-    if (!categories.length) return []
-    return [
-      { label: 'Semua', to: '/products' },
-      ...categories.map((c) => ({ label: c.name, to: `/products?category=${c.slug}` })),
-    ]
-  }, [categories])
 
   const updateParams = (updater) => {
     const next = new URLSearchParams(searchParams)
@@ -288,10 +275,9 @@ export default function Products() {
 
   return (
     <>
-      <SubNav title={subNavTitle} links={subNavLinks} />
-
-      <main style={{ backgroundColor: '#f5f5f7', minHeight: '100vh' }}>
-        {/* Headline section */}
+      <main style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
+        <br></br>
+        {/* Headline section
         <section style={{ padding: '64px 22px 32px' }}>
           <div style={{ maxWidth: 1024, margin: '0 auto' }}>
             <h1
@@ -320,7 +306,7 @@ export default function Products() {
               Pilih produk Apple favoritmu. Pengiriman gratis ke seluruh Indonesia.
             </p>
           </div>
-        </section>
+        </section> */}
 
         {/* Body */}
         <section style={{ paddingBottom: 80 }}>
@@ -332,7 +318,12 @@ export default function Products() {
               padding: '0 22px',
             }}
           >
-            <aside className="catalog-sidebar">
+            <motion.aside 
+              className="catalog-sidebar"
+              initial={prefersReducedMotion ? false : { opacity: 0, x: -30 }}
+              animate={prefersReducedMotion ? false : { opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
               <ProductFilter
                 categorySlug={categorySlug}
                 minPrice={minPrice}
@@ -341,7 +332,7 @@ export default function Products() {
                 onPriceApply={handlePriceApply}
                 onReset={handleReset}
               />
-            </aside>
+            </motion.aside>
 
             <div className="catalog-main">
               <div
@@ -402,11 +393,22 @@ export default function Products() {
 
               {!loading && !error && products.length > 0 && (
                 <>
-                  <div className="catalog-grid">
-                    {products.map((p) => (
-                      <ProductCard key={p.id} {...p} />
-                    ))}
-                  </div>
+                  <motion.div className="catalog-grid" layout>
+                    <AnimatePresence mode="popLayout">
+                      {products.map((p) => (
+                        <motion.div
+                          key={p.id}
+                          layout
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ProductCard {...p} />
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </motion.div>
                   <Pagination
                     page={pageParam}
                     totalPages={totalPages}

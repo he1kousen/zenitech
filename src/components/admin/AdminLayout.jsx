@@ -175,7 +175,7 @@ export default function AdminLayout({ children }) {
   const closeMobile = () => setMobileOpen(false)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f5f5f7' }}>
+    <div style={{ minHeight: '100vh', background: '#ffffff' }}>
       {/* Mobile Top Bar */}
       <header
         style={{

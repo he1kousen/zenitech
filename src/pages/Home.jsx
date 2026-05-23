@@ -42,7 +42,7 @@ export default function Home() {
 
         <style>{`
           .home-footer-strip {
-            background-color: #f5f5f7;
+            background-color: #ffffff;
             padding: 32px 24px 64px;
             border-top: 1px solid #d2d2d7;
             margin-top: 24px;

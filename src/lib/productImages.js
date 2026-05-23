@@ -1,45 +1,26 @@
-// Mapping product slug → official Apple CDN image URL.
-// Sumber: store.storeimages.cdn-apple.com (publik).
-// PENTING: jangan pakai parameter `.v=...` (signed hash) — expired tanpa
-// tanda di browser. Format bersih: `?wid=...&hei=...&fmt=png-alpha`.
-//
-// Semua URL di file ini sudah diverifikasi load (returns image data) per
-// 2026-05-20.
-
-const APPLE_CDN = 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is'
-const Q = '?wid=1200&hei=900&fmt=png-alpha'
-
-const apple = (id) => `${APPLE_CDN}/${id}${Q}`
-
 export const PRODUCT_IMAGES = {
-  'iphone-16-pro-max': apple('iphone-16-pro-finish-select-202409-6-9inch-deserttitanium'),
-  'iphone-16': apple('iphone-16-finish-select-202409-6-1inch-ultramarine'),
-  'iphone-15': apple('iphone-15-finish-select-202309-6-1inch-pink'),
-
-  'macbook-air-m3-13': apple('mba13-midnight-select-202402'),
-  'macbook-pro-m4-14': apple('mbp14-spaceblack-select-202410'),
-
-  // iPad Pro 11" 2022 (URL 2024 11-inch saat ini 404 di CDN — pakai 2022 sebagai stand-in clean)
-  'ipad-pro-m4-11': apple('ipad-pro-11-select-wifi-spacegray-202210'),
-
-  'apple-watch-series-10': apple('watch-case-46-aluminum-jetblack-nc-s10'),
-
-  'airpods-pro-2': apple('MTJV3'),
-  'apple-pencil-pro': apple('MX2D3'),
+  'iphone-15-pro-max': '/images/products/iphone-15-pro-max-1.webp',
+  'iphone-14-pro-max': '/images/products/iphone-14-pro-max-1.webp',
+  'iphone-13': '/images/products/iphone-13-1.webp',
+  'iphone-12': '/images/products/iphone-12-1.webp',
+  'macbook-air-m2': '/images/products/macbook-air-m2-1.webp',
+  'apple-watch-nike-s3': '/images/products/apple-watch-nike-s3-1.webp',
+  'beats-studio-elite': '/images/products/beats-studio-elite-1.webp',
+  'playstation-dualsense': '/images/products/playstation-dualsense-1.webp',
 }
 
 // Per-kategori fallback image (untuk produk yang slug-nya tidak ada di mapping).
 export const CATEGORY_FALLBACK_IMAGES = {
-  iphone: PRODUCT_IMAGES['iphone-16-pro-max'],
-  mac: PRODUCT_IMAGES['macbook-pro-m4-14'],
-  ipad: PRODUCT_IMAGES['ipad-pro-m4-11'],
-  'apple-watch': PRODUCT_IMAGES['apple-watch-series-10'],
-  watch: PRODUCT_IMAGES['apple-watch-series-10'],
-  aksesoris: PRODUCT_IMAGES['airpods-pro-2'],
+  iphone: PRODUCT_IMAGES['iphone-15-pro-max'],
+  mac: PRODUCT_IMAGES['macbook-air-m2'],
+  ipad: PRODUCT_IMAGES['macbook-air-m2'],
+  'apple-watch': PRODUCT_IMAGES['apple-watch-nike-s3'],
+  watch: PRODUCT_IMAGES['apple-watch-nike-s3'],
+  aksesoris: PRODUCT_IMAGES['beats-studio-elite'],
 }
 
-// Last-resort fallback yang selalu work (di-host oleh placeholder neutral).
-export const ULTIMATE_FALLBACK = PRODUCT_IMAGES['iphone-16-pro-max']
+// Last-resort fallback yang selalu work
+export const ULTIMATE_FALLBACK = PRODUCT_IMAGES['iphone-15-pro-max']
 
 const PLACEHOLDER_HOSTS = ['placehold.co', 'placeholder.com', 'via.placeholder.com']
 
@@ -55,8 +36,8 @@ function categorySlug(category) {
 }
 
 /**
- * Resolve gambar produk yang clean.
- * - Kalau slug ada di mapping → pakai URL Apple CDN.
+ * Resolve gambar produk.
+ * - Kalau slug ada di mapping → pakai URL lokal.
  * - Kalau image_url valid (bukan placeholder) → pakai itu.
  * - Kalau tidak ada → fallback per kategori.
  */

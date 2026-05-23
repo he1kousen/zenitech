@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthContext } from '../../contexts/AuthContext'
 import { useCartStore } from '../../store/cartStore'
 
@@ -79,7 +80,21 @@ export default function GlobalNav() {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [hoveredPath, setHoveredPath] = useState(null)
   const userMenuRef = useRef(null)
+  const location = useLocation()
+
+  // Reset hovered path on route change
+  useEffect(() => {
+    setHoveredPath(null)
+  }, [location.pathname])
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 100)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     if (!userMenuOpen) return
@@ -114,11 +129,23 @@ export default function GlobalNav() {
     navigate('/')
   }
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   return (
     <>
-      <nav
-        className="bg-surface-black sticky top-0"
-        style={{ height: 44, zIndex: 50 }}
+      <motion.nav
+        initial={prefersReducedMotion ? false : { y: -44, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+        className="sticky top-0"
+        style={{ 
+          height: 44, 
+          zIndex: 50,
+          backgroundColor: scrolled ? 'rgba(29, 29, 31, 0.72)' : '#1d1d1f',
+          backdropFilter: scrolled ? 'blur(20px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+          transition: 'background-color 0.3s ease, backdrop-filter 0.3s ease'
+        }}
       >
         <div
           className="relative flex items-center h-full"
@@ -163,9 +190,9 @@ export default function GlobalNav() {
             <div className="flex items-center" style={{ gap: 0 }}>
               {NAV_LINKS.map((link) => (
                 <Link
-                  key={link.label}
+                  key={link.to}
                   to={link.to}
-                  className="text-on-dark active-scale"
+                  className="text-on-dark active-scale relative"
                   style={{
                     fontFamily: "'SF Pro Text', system-ui, -apple-system, sans-serif",
                     fontSize: 12,
@@ -175,10 +202,26 @@ export default function GlobalNav() {
                     opacity: 0.88,
                     textDecoration: 'none',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.88')}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                    setHoveredPath(link.to)
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.88'
+                    setHoveredPath(null)
+                  }}
                 >
                   {link.label}
+                  {hoveredPath === link.to && !prefersReducedMotion && (
+                    <motion.div
+                      layoutId="nav-hover-underline"
+                      className="absolute bottom-0 left-0 right-0 h-[1px] bg-white"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
                 </Link>
               ))}
             </div>
@@ -213,22 +256,28 @@ export default function GlobalNav() {
                 }}
               >
                 <BagIcon className="w-4 h-4" />
-                {totalItems > 0 && (
-                  <span
-                    className="bg-primary text-on-primary absolute"
-                    aria-hidden="true"
-                    style={{
-                      top: -2, right: -4, minWidth: 16, height: 16,
-                      borderRadius: 9999, padding: '0 4px',
-                      fontFamily: "'SF Pro Text', system-ui, -apple-system, sans-serif",
-                      fontSize: 10, fontWeight: 600,
-                      lineHeight: 1, display: 'flex',
-                      alignItems: 'center', justifyContent: 'center',
-                    }}
-                  >
-                    {totalItems > 99 ? '99+' : totalItems}
-                  </span>
-                )}
+                <AnimatePresence>
+                  {totalItems > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 20 }}
+                      className="bg-primary text-on-primary absolute"
+                      aria-hidden="true"
+                      style={{
+                        top: -2, right: -4, minWidth: 16, height: 16,
+                        borderRadius: 9999, padding: '0 4px',
+                        fontFamily: "'SF Pro Text', system-ui, -apple-system, sans-serif",
+                        fontSize: 10, fontWeight: 600,
+                        lineHeight: 1, display: 'flex',
+                        alignItems: 'center', justifyContent: 'center',
+                      }}
+                    >
+                      {totalItems > 99 ? '99+' : totalItems}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </button>
 
               <div className="relative" ref={userMenuRef} style={{ marginLeft: 4 }}>
@@ -370,16 +419,25 @@ export default function GlobalNav() {
             </button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
+      <AnimatePresence>
       {drawerOpen && (
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
           className="fixed inset-0 min-[834px]:hidden"
           style={{ zIndex: 60 }}
           onClick={() => setDrawerOpen(false)}
         >
           <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} />
-          <aside
+          <motion.aside
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="absolute top-0 left-0 h-full bg-surface-black"
             style={{ width: '80%', maxWidth: 320 }}
             onClick={(e) => e.stopPropagation()}
@@ -488,9 +546,10 @@ export default function GlobalNav() {
                 </Link>
               )}
             </nav>
-          </aside>
-        </div>
+          </motion.aside>
+        </motion.div>
       )}
+      </AnimatePresence>
     </>
   )
 }

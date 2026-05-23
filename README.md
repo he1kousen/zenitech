@@ -1,6 +1,6 @@
 # Zenitech
 
-Apple Authorized Reseller — e-commerce platform untuk pasar Indonesia. Project portfolio.
+Apple Authorized Reseller — e-commerce platform untuk pasar Indonesia.
 
 > Belanja resmi iPhone, Mac, iPad, Apple Watch, dan aksesoris Apple. Pembayaran aman via Midtrans, pengiriman ke seluruh Indonesia.
 
@@ -10,6 +10,7 @@ Apple Authorized Reseller — e-commerce platform untuk pasar Indonesia. Project
 - **Styling**: Tailwind CSS v4
 - **UI Components**: shadcn/ui
 - **State Management**: Zustand
+- **Animations & Scrolling**: Framer Motion, GSAP, Lenis
 - **Backend / Auth / DB / Storage**: Supabase (PostgreSQL + Auth + Storage + Edge Functions)
 - **Payment**: Midtrans Snap
 - **Routing**: React Router v6
@@ -21,13 +22,27 @@ Live: _isi setelah deploy_ (mis. https://zenitech.vercel.app)
 
 ## Screenshot
 
-_Placeholder — akan diisi setelah Phase 4 selesai._
+Home Page
+![home](images/preview/home.png)
+![home2](images/preview/home2.png)
+![home3](images/preview/home3.png)
+![home4](images/preview/home4.png)
 
-```
-┌───────────────────────────────────────────┐
-│  HOME — hero slideshow + bestsellers grid │
-└───────────────────────────────────────────┘
-```
+Products
+![products](images/preview/products.png)
+
+Product Detail
+![product-detail](images/preview/product-detail.png)
+
+Cart
+![cart](images/preview/cart.png)
+
+Checkout
+![checkout](images/preview/checkout.png)
+
+Orders
+![orders](images/preview/orders.png)
+
 
 ## Project Structure
 
@@ -44,7 +59,7 @@ zenitech/
 │   │   ├── supabase.js        # Supabase client (single entry point)
 │   │   ├── midtrans.js        # Midtrans helper
 │   │   ├── orders.js          # Order status helpers
-│   │   └── productImages.js   # Product image resolver (Apple CDN mapping)
+│   │   └── productImages.js   # Product image resolver 
 │   ├── pages/
 │   │   ├── Home.jsx
 │   │   ├── Products.jsx
@@ -81,7 +96,7 @@ zenitech/
 ### 1. Clone repository
 
 ```bash
-git clone https://github.com/<username>/zenitech.git
+git clone https://github.com/he1kousen/zenitech.git
 cd zenitech
 ```
 
@@ -201,12 +216,11 @@ Edge Functions (di-set via `supabase secrets set`):
 - Webhook handler dengan verifikasi SHA-512 signature
 - Order management buyer: tracking 4-step, history, detail
 - Auth: email/password + Google OAuth-ready
-- Admin dashboard (Phase 4)
+- Admin dashboard (CRUD Kategori, Produk, Orders)
 - Design system Apple-inspired (single accent #0066cc, SF Pro typography, photography-first)
+- Animasi interaktif secara global (*smooth scrolling*, *page transitions*, *staggered reveals*) menggunakan Framer Motion, GSAP, dan Lenis.
 
 ## Development Roadmap
-
-Lihat [PRD.md](./PRD.md) (internal) untuk requirement & fase pengembangan.
 
 | Phase | Status |
 |---|---|
@@ -214,7 +228,8 @@ Lihat [PRD.md](./PRD.md) (internal) untuk requirement & fase pengembangan.
 | 2 — Catalog (home, products, detail, cart) | Done |
 | 2.5 — Aesthetic redesign (Apple-style) | Done |
 | 3 — Checkout & order management | Done |
-| 4 — Admin dashboard & deploy | In progress |
+| 4 — Admin dashboard & deploy | Done |
+| 5 — Global Animations (Framer Motion, GSAP, Lenis) | Done |
 
 ## License
 

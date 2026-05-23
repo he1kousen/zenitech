@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, Link, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { supabase, getImageUrl } from '../lib/supabase'
 import { useAuthContext } from '../contexts/AuthContext'
 import {
@@ -118,6 +119,7 @@ export default function OrderSuccess() {
   const [order, setOrder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   useEffect(() => {
     if (!orderId) {
@@ -240,7 +242,13 @@ export default function OrderSuccess() {
         }}
       >
         {/* HERO — checkmark + headline */}
-        <section
+        <motion.section
+          initial={prefersReducedMotion ? false : "hidden"}
+          animate={prefersReducedMotion ? false : "visible"}
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } },
+            hidden: {}
+          }}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -249,16 +257,32 @@ export default function OrderSuccess() {
             textAlign: 'center',
           }}
         >
-          <CheckIcon />
-          <h1 className="text-display-md text-ink">Pembayaran Berhasil!</h1>
-          <p className="text-body-base text-ink-muted-48">
+          <motion.div variants={{ hidden: { scale: 0, opacity: 0 }, visible: { scale: 1, opacity: 1, transition: { type: "spring", bounce: 0.5 } } }}>
+            <CheckIcon />
+          </motion.div>
+          <motion.h1 
+            className="text-display-md text-ink"
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          >
+            Pembayaran Berhasil!
+          </motion.h1>
+          <motion.p 
+            className="text-body-base text-ink-muted-48"
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          >
             Terima kasih telah berbelanja di Zenitech
-          </p>
-        </section>
+          </motion.p>
+        </motion.section>
 
         {/* CARD — detail order */}
-        <section
+        <motion.section
           className="bg-canvas"
+          initial={prefersReducedMotion ? false : "hidden"}
+          animate={prefersReducedMotion ? false : "visible"}
+          variants={{
+            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } },
+            hidden: {}
+          }}
           style={{
             border: '1px solid #e0e0e0',
             borderRadius: 18,
@@ -268,7 +292,8 @@ export default function OrderSuccess() {
             gap: 17,
           }}
         >
-          <div
+          <motion.div
+            variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
             style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -284,9 +309,10 @@ export default function OrderSuccess() {
               </p>
             </div>
             <StatusBadge status={order.status} />
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
+            variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
             style={{
               borderTop: '1px solid #e0e0e0',
               paddingTop: 12,
@@ -298,10 +324,13 @@ export default function OrderSuccess() {
             <p className="text-body-base text-ink">
               {formatDate(order.created_at)}
             </p>
-          </div>
+          </motion.div>
 
           {/* List item */}
-          <div style={{ borderTop: '1px solid #e0e0e0', paddingTop: 8 }}>
+          <motion.div 
+            variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
+            style={{ borderTop: '1px solid #e0e0e0', paddingTop: 8 }}
+          >
             <p
               className="text-caption-strong text-ink"
               style={{ marginBottom: 4 }}
@@ -319,10 +348,11 @@ export default function OrderSuccess() {
                 <OrderItemRow key={item.id} item={item} />
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Total */}
-          <div
+          <motion.div
+            variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
             style={{
               borderTop: '1px solid #e0e0e0',
               paddingTop: 12,
@@ -338,10 +368,11 @@ export default function OrderSuccess() {
             >
               {formatRupiah(order.total_amount)}
             </span>
-          </div>
+          </motion.div>
 
           {/* Alamat pengiriman */}
-          <div
+          <motion.div
+            variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
             style={{
               borderTop: '1px solid #e0e0e0',
               paddingTop: 12,
@@ -372,8 +403,8 @@ export default function OrderSuccess() {
                 {addr.shipping_method.eta}
               </p>
             )}
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* Buttons */}
         <div

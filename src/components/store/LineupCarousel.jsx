@@ -173,7 +173,7 @@ export default function LineupCarousel({ title = 'Jelajahi jajarannya.', linkLab
   return (
     <section
       style={{
-        backgroundColor: '#f5f5f7',
+        backgroundColor: '#ffffff',
         paddingTop: 80,
         paddingBottom: 80,
       }}

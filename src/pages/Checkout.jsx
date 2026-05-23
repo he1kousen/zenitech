@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useCartStore } from '../store/cartStore'
 import { useAuthContext } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
@@ -235,6 +236,7 @@ export default function Checkout() {
   const [isDesktop, setIsDesktop] = useState(
     typeof window !== 'undefined' ? window.innerWidth > 834 : false
   )
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   // Redirect ke /products kalau cart kosong (skip saat lagi submit/abis sukses)
   useEffect(() => {
@@ -479,9 +481,18 @@ export default function Checkout() {
           }}
         >
           {/* LEFT COLUMN — FORM SECTIONS */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <motion.div 
+            style={{ display: 'flex', flexDirection: 'column', gap: 24 }}
+            initial={prefersReducedMotion ? false : "hidden"}
+            animate={prefersReducedMotion ? false : "visible"}
+            variants={{
+              visible: { transition: { staggerChildren: 0.1 } },
+              hidden: {}
+            }}
+          >
             {/* SECTION 1 — ALAMAT PENGIRIMAN */}
-            <section
+            <motion.section
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="bg-canvas"
               style={{
                 border: '1px solid #e0e0e0',
@@ -496,8 +507,13 @@ export default function Checkout() {
                 Alamat Pengiriman
               </h2>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 17 }}>
-                <div>
+              <motion.div 
+                style={{ display: 'flex', flexDirection: 'column', gap: 17 }}
+                variants={{
+                  visible: { transition: { staggerChildren: 0.05 } }
+                }}
+              >
+                <motion.div variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}>
                   <FieldLabel htmlFor="recipient">Nama penerima</FieldLabel>
                   <input
                     id="recipient"
@@ -508,9 +524,9 @@ export default function Checkout() {
                     autoComplete="name"
                   />
                   <FieldError message={errors.recipient} />
-                </div>
+                </motion.div>
 
-                <div>
+                <motion.div variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}>
                   <FieldLabel htmlFor="phone">Nomor telepon</FieldLabel>
                   <input
                     id="phone"
@@ -523,9 +539,9 @@ export default function Checkout() {
                     autoComplete="tel"
                   />
                   <FieldError message={errors.phone} />
-                </div>
+                </motion.div>
 
-                <div>
+                <motion.div variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}>
                   <FieldLabel htmlFor="address">Alamat lengkap</FieldLabel>
                   <textarea
                     id="address"
@@ -540,9 +556,10 @@ export default function Checkout() {
                     autoComplete="street-address"
                   />
                   <FieldError message={errors.address} />
-                </div>
+                </motion.div>
 
-                <div
+                <motion.div
+                  variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}
                   style={{
                     display: 'grid',
                     gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr',
@@ -576,9 +593,9 @@ export default function Checkout() {
                     />
                     <FieldError message={errors.postalCode} />
                   </div>
-                </div>
+                </motion.div>
 
-                <div>
+                <motion.div variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }}>
                   <FieldLabel htmlFor="province">Provinsi</FieldLabel>
                   <input
                     id="province"
@@ -589,12 +606,13 @@ export default function Checkout() {
                     autoComplete="address-level1"
                   />
                   <FieldError message={errors.province} />
-                </div>
-              </div>
-            </section>
+                </motion.div>
+              </motion.div>
+            </motion.section>
 
             {/* SECTION 2 — PILIH PENGIRIMAN */}
-            <section
+            <motion.section
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="bg-canvas"
               style={{
                 border: '1px solid #e0e0e0',
@@ -618,11 +636,14 @@ export default function Checkout() {
                   />
                 ))}
               </div>
-            </section>
-          </div>
+            </motion.section>
+          </motion.div>
 
           {/* RIGHT COLUMN — ORDER SUMMARY */}
-          <aside
+          <motion.aside
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
+            animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
             style={{
               position: isDesktop ? 'sticky' : 'static',
               top: isDesktop ? 68 : 'auto',
@@ -632,7 +653,7 @@ export default function Checkout() {
             <section
               className="bg-canvas-parchment"
               style={{
-                background: '#f5f5f7',
+                background: '#ffffff',
                 border: '1px solid #e0e0e0',
                 borderRadius: 18,
                 padding: 24,
@@ -742,7 +763,7 @@ export default function Checkout() {
                 Kamu akan diarahkan ke halaman pembayaran Midtrans
               </p>
             </section>
-          </aside>
+          </motion.aside>
         </form>
       </div>
     </main>
